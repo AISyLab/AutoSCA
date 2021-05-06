@@ -452,26 +452,22 @@ if __name__ == "__main__":
     print('Retrain the best model with 10 epochs...')
     best_hp = tuner.get_best_hyperparameters()[0]
     model = tuner.hypermodel.build(best_hp)
-    model.fit(x=X_profiling, y=Y_profiling[:, :classes], batch_size=32, verbose=2, epochs=10)
+    model.fit(x=X_profiling, y=Y_profiling, batch_size=32, verbose=2, epochs=10)
 
     # Attack on the test traces with 10 epochs
     predictions = model.predict(X_attack)
     avg_rank = np.array(perform_attacks(5000, predictions, plt_attack, nb_attacks=10, byte=2, shuffle=True, output_rank=True))
-    file_root = str('/home/nfs/lwu3/Project/Auto_SCA/' + str(dataset) + '_' + str(attack_model) + '_' + str(leakage) + '_'  + str(searching_method) + '_' + str(objective) + '_GE10.npy')
-    np.save(file_root, avg_rank)
     print('GE smaller that 1:', np.argmax(avg_rank < 1))
     print('GE smaller that 5:', np.argmax(avg_rank < 5))
 
     print('Retrain the best model with 50 epochs...')
     best_hp = tuner.get_best_hyperparameters()[0]
     model = tuner.hypermodel.build(best_hp)
-    model.fit(x=X_profiling, y=Y_profiling[:, :classes], batch_size=32, verbose=2, epochs=50)
+    model.fit(x=X_profiling, y=Y_profiling, batch_size=32, verbose=2, epochs=50)
 
     # Attack on the test traces with 50 epochs
     predictions = model.predict(X_attack)
     avg_rank = np.array(perform_attacks(5000, predictions, plt_attack, nb_attacks=10, byte=2, shuffle=True, output_rank=True))
-    file_root = str('/home/nfs/lwu3/Project/Auto_SCA/' + str(dataset) + '_' + str(attack_model) + '_' + str(leakage) + '_'  + str(searching_method) + '_' + str(objective) + '_GE50.npy')
-    np.save(file_root, avg_rank) 
     print(np.shape(avg_rank))
     print('GE smaller that 1:', np.argmax(avg_rank < 1))
     print('GE smaller that 5:', np.argmax(avg_rank < 5))
