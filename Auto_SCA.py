@@ -455,7 +455,7 @@ if __name__ == "__main__":
     model.fit(x=X_profiling, y=Y_profiling, batch_size=32, verbose=2, epochs=10)
 
     # Attack on the test traces with 10 epochs
-    predictions = model.predict(X_attack)
+    predictions = model.predict(X_attack[nb_traces_attacks:])
     avg_rank = np.array(perform_attacks(5000, predictions, plt_attack, nb_attacks=10, byte=2, shuffle=True, output_rank=True))
     print('GE smaller that 1:', np.argmax(avg_rank < 1))
     print('GE smaller that 5:', np.argmax(avg_rank < 5))
@@ -466,7 +466,7 @@ if __name__ == "__main__":
     model.fit(x=X_profiling, y=Y_profiling, batch_size=32, verbose=2, epochs=50)
 
     # Attack on the test traces with 50 epochs
-    predictions = model.predict(X_attack)
+    predictions = model.predict([nb_traces_attacks:])
     avg_rank = np.array(perform_attacks(5000, predictions, plt_attack, nb_attacks=10, byte=2, shuffle=True, output_rank=True))
     print(np.shape(avg_rank))
     print('GE smaller that 1:', np.argmax(avg_rank < 1))
